@@ -11,10 +11,14 @@ import {
     LogoutOutlined,
   } from "@ant-design/icons";
 import Sider from "antd/es/layout/Sider";
+interface DashboardProps {
+  userInfo: Record<string, any>;
+  onLogout: () => void;
+}
 
 const { Header, Content } = Layout;
 const { Title } = Typography;
-const profileMenu = (
+const profileMenu = (onLogout: () => void)=> (
     <Menu>
       <Menu.Item key="1" icon={<UserOutlined />}>
         Profile
@@ -23,13 +27,13 @@ const profileMenu = (
         Settings
       </Menu.Item>
       <Menu.Divider />
-      <Menu.Item key="3" icon={<LogoutOutlined />} danger>
+      <Menu.Item key="3" icon={<LogoutOutlined />} danger onClick={onLogout}>
         Logout
       </Menu.Item>
     </Menu>
   );
 
-const Dashboard: React.FC = () => {
+const Dashboard: React.FC<DashboardProps> = ({ userInfo, onLogout }) => {
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [suggestions, setSuggestions] = useState<string[]>([]);
@@ -76,10 +80,10 @@ const Dashboard: React.FC = () => {
                     Financial Invoice Analysis
                 </Title>
 
-                <Dropdown overlay={profileMenu} trigger={["click"]}>
+                <Dropdown overlay={profileMenu(onLogout)} trigger={["click"]}>
                     <Space>
                     <Avatar icon={<UserOutlined />} />
-                    <span style={{ cursor: "pointer" }}>John Doe</span>
+                    <span style={{ cursor: "pointer" }}>{userInfo.username}</span>
                     </Space>
                 </Dropdown>
             </Header>
@@ -107,5 +111,6 @@ const Dashboard: React.FC = () => {
     </Layout>
   );
 };
+
 
 export default Dashboard;
