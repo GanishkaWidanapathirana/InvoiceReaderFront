@@ -1,20 +1,20 @@
 import React from "react";
+import { List } from "antd";
+import { Suggestion } from "../types";
 
 interface Props {
-  suggestions: string[];
+  suggestions: Suggestion[];
 }
 
 const Suggestions: React.FC<Props> = ({ suggestions }) => {
   return (
     <div>
       {suggestions.length > 0 ? (
-        <ul style={{ paddingLeft: "16px", listStyleType: "disc" }}>
-          {suggestions.map((suggestion, index) => (
-            <li key={index} style={{ marginBottom: "8px" }}>
-              {suggestion}
-            </li>
-          ))}
-        </ul>
+        <List
+          bordered
+          dataSource={suggestions}
+          renderItem={(item) => <List.Item>{item.description}</List.Item>}
+        />
       ) : (
         <p>No suggestions available. Upload and process a document to see results.</p>
       )}
