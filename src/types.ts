@@ -1,7 +1,4 @@
-export interface Suggestion {
-    type: string | null;
-    description: string | null;
-  }
+
   
   export interface EmailBody {
     subject: string | null;
@@ -18,7 +15,7 @@ export interface Suggestion {
     grace_period: string | null;
     vendor_name: string | null;
     buyer_name: string | null;
-    suggestions: Suggestion[];
+    suggestions: string[];
     email_body: EmailBody;
   }
   

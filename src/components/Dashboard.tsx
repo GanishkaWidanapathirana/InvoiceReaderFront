@@ -9,7 +9,6 @@ import {
   SettingOutlined,
   LogoutOutlined,
 } from "@ant-design/icons";
-import Sider from "antd/es/layout/Sider";
 import { ApiResponse } from "../types";
 import { showError, showSuccess } from "../utils/notifications";
 import InvoiceDetails from "./InvoiceDetails"; // Invoice details component
@@ -18,7 +17,7 @@ interface DashboardProps {
   onLogout: () => void;
 }
 
-const { Header, Content } = Layout;
+const { Sider, Header, Content, Footer } = Layout;
 const { Title } = Typography;
 
 const profileMenu = (onLogout: () => void) => (
@@ -59,7 +58,7 @@ const Dashboard: React.FC<DashboardProps> = ({ userInfo, onLogout }) => {
   };
 
   return (
-      <Layout style={{ minHeight: "100vh" }}>
+      <Layout style={{ minHeight: "100vh", display: "flex" }}>
         {/* Sidebar */}
         <Sider
           breakpoint="lg"
@@ -87,7 +86,7 @@ const Dashboard: React.FC<DashboardProps> = ({ userInfo, onLogout }) => {
           </Menu>
         </Sider>
   
-        <Layout>
+        <Layout style={{ flex: 1, display: "flex", flexDirection: "column" }}>
           {/* Header */}
           <Header
             style={{
@@ -111,8 +110,14 @@ const Dashboard: React.FC<DashboardProps> = ({ userInfo, onLogout }) => {
             </Dropdown>
           </Header>
   
-          <Content style={{ margin: "16px" }}>
-            {/* Upload Document Section */}
+          <Content
+            style={{
+              margin: "16px",
+              flex: 1, // This ensures the content area takes all available space
+              overflow: "hidden", // Prevents scrolling within the content
+            }}
+          >
+            {/* Upload Document Section with same height as Header */}
             <Row gutter={[16, 16]} style={{ marginBottom: "16px" }}>
               <Col span={24}>
                 <Card
@@ -121,6 +126,10 @@ const Dashboard: React.FC<DashboardProps> = ({ userInfo, onLogout }) => {
                     backgroundColor: "#fff",
                     boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
                     borderRadius: "10px",
+                    height: "80px", // Set height to match header
+                    display: "flex",
+                    alignItems: "center", // Center content vertically
+                    justifyContent: "center",
                   }}
                 >
                   <UploadDocument
@@ -155,6 +164,22 @@ const Dashboard: React.FC<DashboardProps> = ({ userInfo, onLogout }) => {
               </Col>
             </Row>
           </Content>
+  
+          {/* Footer */}
+          <Footer
+            style={{
+              textAlign: "center",
+              padding: "10px 50px",
+              position: "relative",
+              bottom: "0",
+              width: "100%",
+              backgroundColor: "#001529",
+              color: "white",
+            }}
+          >
+            <div>© 2025 InvoicePro, Inc. All rights reserved.</div>
+            <div>Contact us: support@invoicepro.com</div>
+          </Footer>
         </Layout>
       </Layout>
     );

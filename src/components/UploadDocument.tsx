@@ -68,7 +68,7 @@ const UploadDocument: React.FC<Props> = ({ onFileUpload, onProcess, setUserType 
       {/* Buttons (Process and Clear) */}
       <Col>
         <Row gutter={16}>
-          <Col>
+          <Row>
             <Button
               type="primary"
               onClick={onProcess}
@@ -77,8 +77,8 @@ const UploadDocument: React.FC<Props> = ({ onFileUpload, onProcess, setUserType 
             >
               Process Document
             </Button>
-          </Col>
-          <Col>
+          </Row>
+          <Row>
             <Button
               type="default"
               block
@@ -87,7 +87,7 @@ const UploadDocument: React.FC<Props> = ({ onFileUpload, onProcess, setUserType 
             >
               Clear Selection
             </Button>
-          </Col>
+          </Row>
         </Row>
       </Col>
     </Row>

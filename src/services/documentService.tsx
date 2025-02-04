@@ -1,8 +1,8 @@
 import axios from "axios";
 import { ApiResponse } from "../types";
-import apiUrl from "../components/config"
+//import apiUrl from "../components/config"
 
-
+const apiUrl="http://localhost:8000"
 
 export const processDocument = async (file: File, userType: string): Promise<ApiResponse> => {
   console.log("File being passed to processDocument:", file);  // Log the file object
