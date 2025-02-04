@@ -1,7 +1,8 @@
 import axios from "axios";
 import { ApiResponse } from "../types";
+import apiUrl from "../components/config"
 
-const API_URL = "http://localhost:8000/upload"; // Update this with your actual API endpoint
+
 
 export const processDocument = async (file: File, userType: string): Promise<ApiResponse> => {
   console.log("File being passed to processDocument:", file);  // Log the file object
@@ -10,7 +11,7 @@ export const processDocument = async (file: File, userType: string): Promise<Api
     formData.append("file", file);
     formData.append("user_type", userType);
 
-    const response = await axios.post<ApiResponse>(API_URL, formData, {
+    const response = await axios.post<ApiResponse>(`${apiUrl}/upload`, formData, {
       headers: {
       },
     });
