@@ -19,25 +19,23 @@ const renderItem = (label: string, value: string | null) => {
 };
 
 const InvoiceDetails: React.FC<Props> = ({ invoice }) => {
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(invoice.email_body.body);
+  const openMailClient = () => {
+    const emailBody = encodeURIComponent(invoice.email_body);
+    window.location.href = `mailto:?body=${emailBody}`;
   };
 
+  console.log(invoice)
   return (
-    <Card
-      title="Invoice Details"
-      style={{
-        margin: "16px",
-        width: "100%",
-        borderRadius: "10px",
-        backgroundColor: "#fff",
-        boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
-      }}
-    >
-      <Row gutter={[16, 16]}>
-        {/* Left Column with Invoice Details */}
-        <Col xs={24} sm={24} md={12} lg={12}>
-          <Descriptions bordered column={1} style={{ marginBottom: "24px" }}>
+    <Row gutter={[16, 16]} style={{ height: '100%' }}>
+      {/* Left Column with Invoice Details */}
+      <Col xs={24} sm={24} md={12} lg={12}>
+        <Card style={{ height: '100%', overflow: 'auto' }}>
+          <Descriptions 
+            bordered 
+            column={1} 
+            title="Invoice Details"
+            style={{ marginBottom: "24px" }}
+          >
             {renderItem("Invoice Number", invoice.invoice_number)}
             {renderItem("Amount", `€${invoice.amount}`)}
             {renderItem("Due Date", invoice.due_date)}
@@ -48,58 +46,106 @@ const InvoiceDetails: React.FC<Props> = ({ invoice }) => {
             {renderItem("Late Fee", invoice.late_fee)}
             {renderItem("Grace Period", invoice.grace_period)}
           </Descriptions>
-        </Col>
+        </Card>
+      </Col>
+    {/* Right Column Container */}
+<Col xs={24} sm={24} md={12} lg={12}>
+  <Row gutter={[0, 16]} style={{ height: '100%' }}>
+    {/* Suggestions Section - 1/3 height */}
+    {invoice.suggestions.length > 0 && (
+      <Col span={24} style={{ height: '40%' }}>
+        <Card 
+          title={
+            <span style={{ 
+              fontSize: '16px',
+              fontWeight: 500,
+              color: '#001529',
+              padding: '0'
+            }}>
+              Suggestions
+            </span>
+          }
+          styles={{
+            body: { 
+              padding: '12px 24px',
+              height: 'calc(100% - 57px)',
+              overflow: 'hidden',
+              display: 'flex',
+              flexDirection: 'column'
+            }
+          }}
+          style={{ height: '100%' }}
+        >
+          <div style={{ 
+            overflowY: 'auto',
+            flex: 1,
+            marginTop: '-4px'
+          }}>
+            <Suggestions suggestions={invoice.suggestions} />
+          </div>
+        </Card>    
+      </Col>           
+    )}
 
-        {/* Right Column with Suggestions Section */}
-        <Col xs={24} sm={24} md={12} lg={12}>
-          {/* Suggestions Section */}
-          {invoice.suggestions.length > 0 && (
-            <>
-              <Title level={4} style={{ color: "#001529", marginBottom: "16px" }}>
-                Suggestions
-              </Title>
-              <Suggestions suggestions={invoice.suggestions} />
-              <Divider />
-            </>
-          )}
-
-          {/* Email Section */}
-          {invoice.email_body.body && (
-            <>
-              <Title level={4} style={{ color: "#001529", marginBottom: "16px" }}>
-                Generated Email
-              </Title>
-              <Card
-                style={{
-                  backgroundColor: "#f7f7f7",
-                  padding: "16px",
-                  borderRadius: "8px",
-                  boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
-                }}
-              >
-                <Paragraph>
-                  <strong>Subject:</strong> {invoice.email_body.subject}
-                </Paragraph>
-                <Paragraph>{invoice.email_body.body}</Paragraph>
-                <Button
-                  type="primary"
-                  style={{
-                    backgroundColor: "#001529",
-                    borderColor: "#001529",
-                    color: "#fff",
-                    borderRadius: "5px",
-                  }}
-                  onClick={copyToClipboard}
-                  block
-                >
-                  Copy Email Text
-                </Button>
-              </Card>
-            </>
-          )}
-        </Col>
-      </Row>
-    </Card>
+    {/* Email Section - 2/3 height */}
+    {invoice.email_body && (
+      <Col span={24} style={{ height: '60%' }}>
+        <Card 
+          title={
+            <span style={{ 
+              fontSize: '16px',
+              fontWeight: 500,
+              color: '#001529',
+              padding: '0'
+            }}>
+              Generated Email
+            </span>
+          }
+          styles={{
+            body: { 
+              padding: '12px 24px',
+              height: 'calc(100% - 57px)',
+              overflow: 'hidden',
+              display: 'flex',
+              flexDirection: 'column'
+            }
+          }}
+          style={{ height: '100%' }}
+        >
+          <div style={{ 
+            overflowY: 'auto',
+            flex: 1,
+            marginTop: '-4px'
+          }}>
+            <Paragraph 
+              style={{ 
+                whiteSpace: 'pre-wrap',
+                textAlign: 'left',
+                marginBottom: '24px'
+              }}
+            >
+              {invoice.email_body}
+            </Paragraph>
+            <Button
+              type="primary"
+              style={{
+                backgroundColor: "#001529",
+                borderColor: "#001529",
+                color: "#fff",
+                borderRadius: "5px",
+              }}
+              onClick={openMailClient}
+              block
+            >
+              Send Email
+            </Button>
+          </div>
+        </Card>                
+      </Col>
+    )}
+  </Row>
+</Col>
+</Row>
   );
 };
 

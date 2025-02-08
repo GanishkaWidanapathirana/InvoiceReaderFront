@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Upload, Button, notification, Select, Row, Col } from "antd";
+import { Upload, Button, notification, Select, Row, Col, Typography } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 
 const { Option } = Select;
@@ -7,11 +7,12 @@ const { Option } = Select;
 interface Props {
   onFileUpload: (file: File | null) => void;
   onProcess: () => void;
-  setUserType: (userType: string) => void; // Callback to set user type
+  setUserType: (userType: string) => void;
 }
 
 const UploadDocument: React.FC<Props> = ({ onFileUpload, onProcess, setUserType }) => {
   const [userType, setUserTypeLocal] = useState<string | null>(null);
+  const [file, setFile] = useState<File | null>(null);
 
   const handleBeforeUpload = (file: File) => {
     const isAcceptedType =
@@ -27,6 +28,7 @@ const UploadDocument: React.FC<Props> = ({ onFileUpload, onProcess, setUserType 
       return false;
     }
 
+    setFile(file);
     onFileUpload(file);
     notification.success({
       message: "File Uploaded",
@@ -38,59 +40,100 @@ const UploadDocument: React.FC<Props> = ({ onFileUpload, onProcess, setUserType 
 
   const handleUserTypeChange = (value: string) => {
     setUserTypeLocal(value);
-    setUserType(value); // Passing the selected user type to parent component
+    setUserType(value);
+  };
+
+  const handleClear = () => {
+    setFile(null);
+    setUserTypeLocal(null);
+    setUserType("");
+    onFileUpload(null);
   };
 
   return (
-    <Row gutter={16} style={{ marginTop: "16px" }} align="middle" justify="start">
-      {/* File Upload */}
-      <Col span={12}>
-        <Upload beforeUpload={handleBeforeUpload} maxCount={1}>
-          <Button icon={<UploadOutlined />} block>
-            Select File
+    <>
+      {/* Title Row */}
+      <Row style={{ width: "100%", marginBottom: 8 }}>
+        <Col>
+          <Typography.Title level={5} style={{ margin: 0, fontWeight: "bold" }}>
+            Upload File Here
+          </Typography.Title>
+        </Col>
+      </Row>
+
+      {/* Content Row */}
+      <Row 
+        style={{ 
+          width: "100%", 
+          display: "flex", 
+          justifyContent: "space-between", 
+          alignItems: "center" 
+        }}
+        gutter={16}
+      >
+        {/* File Upload */}
+        <Col flex="500px">
+          <Upload 
+            beforeUpload={handleBeforeUpload} 
+            maxCount={1}
+            showUploadList={false}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <Button icon={<UploadOutlined />}>
+                Select File
+              </Button>
+              {file && (
+                <span style={{ 
+                  flex: 1, 
+                  overflow: 'hidden', 
+                  textOverflow: 'ellipsis', 
+                  whiteSpace: 'nowrap' 
+                }}>
+                  {file.name}
+                </span>
+              )}
+            </div>
+          </Upload>
+        </Col>
+
+        {/* User Type Selection */}
+        <Col flex="200px">
+          <Select
+            value={userType}
+            onChange={handleUserTypeChange}
+            placeholder="Select User Type"
+            style={{ width: "100%" }}
+          >
+            <Option value="buyer">Buyer</Option>
+            <Option value="vendor">Vendor</Option>
+          </Select>
+        </Col>
+
+        {/* Process Button */}
+        <Col flex="150px">
+          <Button 
+            type="primary" 
+            onClick={onProcess} 
+            block 
+            disabled={!userType}
+          >
+            Process
           </Button>
-        </Upload>
-      </Col>
+        </Col>
 
-      {/* User Type Selection */}
-      <Col>
-        <Select
-          value={userType}
-          onChange={handleUserTypeChange}
-          placeholder="Select User Type"
-          style={{ width: "200px", marginLeft: "16px" }}
-        >
-          <Option value="buyer">Buyer</Option>
-          <Option value="vendor">Vendor</Option>
-        </Select>
-      </Col>
-
-      {/* Buttons (Process and Clear) */}
-      <Col>
-        <Row gutter={16}>
-          <Row>
-            <Button
-              type="primary"
-              onClick={onProcess}
-              block
-              disabled={!userType}
-            >
-              Process Document
-            </Button>
-          </Row>
-          <Row>
-            <Button
-              type="default"
-              block
-              onClick={() => setUserType("")} // Clear user type selection
-              disabled={!userType}
-            >
-              Clear Selection
-            </Button>
-          </Row>
-        </Row>
-      </Col>
-    </Row>
+        {/* Clear Button */}
+        <Col flex="150px">
+          <Button 
+            onClick={handleClear} 
+            block 
+            disabled={!userType}
+            danger
+          >
+            Clear
+          </Button>
+        </Col>
+      </Row>
+    </>
   );
 };
 

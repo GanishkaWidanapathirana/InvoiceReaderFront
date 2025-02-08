@@ -10,7 +10,8 @@ interface WindowConfigs {
   }
   
   // Use a fallback in case `window.configs` is undefined
-  const apiUrl: string = window?.configs?.apiUrl ?? "/";
-  
+  //const apiUrl: string = window?.configs?.apiUrl ?? "/";
+  const apiUrl = "http://localhost:8000";
+
 export default apiUrl;
 export {};

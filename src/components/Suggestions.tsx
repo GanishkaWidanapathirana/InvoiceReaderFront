@@ -6,7 +6,7 @@ interface Props {
 }
 
 const Suggestions: React.FC<Props> = ({ suggestions }) => {
-  console.log(suggestions)
+    console.log(suggestions)
     // Filter out any null or empty values if needed
     const validSuggestions = suggestions.filter((item) => item !== null && item !== "");
 
@@ -14,9 +14,8 @@ const Suggestions: React.FC<Props> = ({ suggestions }) => {
       <div>
         {validSuggestions.length > 0 ? (
           <List
-            bordered
             dataSource={validSuggestions}
-            renderItem={(item) => <List.Item>{item}</List.Item>}
+            renderItem={(item) => <List.Item style={{ listStyleType: "disc", marginLeft: "10px" }}>{item}</List.Item>}
           />
         ) : (
           <p>No suggestions available. Upload and process a document to see results.</p>

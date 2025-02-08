@@ -18,6 +18,7 @@ const App: React.FC = () => {
       if (parsedUserInfo) {
         // Save parsed info to localStorage and update state
         localStorage.setItem('userinfo', JSON.stringify(parsedUserInfo));
+        console.log(parsedUserInfo);
         setUserInfo(parsedUserInfo);
 
         // Remove the cookie after processing
