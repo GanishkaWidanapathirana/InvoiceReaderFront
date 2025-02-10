@@ -39,12 +39,12 @@ const Dashboard: React.FC<DashboardProps> = ({ userInfo, onLogout }) => {
   const renderComponent = () => {
     switch (activeComponent) {
       case "viewInvoices":
-        return <ViewInvoices />;
+        return <ViewInvoices userInfo={userInfo} />;
       case "askQuestions":
         return <AskQuestions documentId={documentId} />;
       case "upload":
       default:
-        return <UploadPage setDocumentId={setDocumentId}/>;
+        return <UploadPage setDocumentId={setDocumentId} userInfo={userInfo}/>;
     }
   };
 

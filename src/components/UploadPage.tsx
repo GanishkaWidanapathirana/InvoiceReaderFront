@@ -8,12 +8,13 @@ import { showError, showSuccess } from "../utils/notifications";
 
 interface Props {
   setDocumentId: (documentId: string|null) => void;
+  userInfo:Record<string, any>
 }
 
   
 
 
-const UploadPage: React.FC<Props> = ({setDocumentId}) => {
+const UploadPage: React.FC<Props> = ({setDocumentId,userInfo}) => {
     const [uploadedFile, setUploadedFile] = useState<File | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
     const [invoiceData, setInvoiceData] = useState<ApiResponse | null>(null);
@@ -21,10 +22,10 @@ const UploadPage: React.FC<Props> = ({setDocumentId}) => {
 
     const handleProcess = async () => {
         if (!uploadedFile) return;
-
+        console.log(userInfo)
         setLoading(true);
         try {
-        const result: ApiResponse = await processDocument(uploadedFile, userType);
+        const result: ApiResponse = await processDocument(uploadedFile, userType,userInfo.email);
         setInvoiceData(result);
         setDocumentId(result.response.document_id);
         showSuccess("Invoice processed successfully!", "Your invoice has been processed successfully!");
